@@ -1,19 +1,17 @@
 <html>
   <head>
-    <link href="/src/stylesheets/popup.css" rel="stylesheet" type="text/css"/>
+    <link href="/src/stylesheets/background.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="background.js"></script>
   </head>
 
   <body>
-    <div class="container">
-     <h2 id=title>ToonLoader</h2>
-    </div>
-    <div class="search-container">
-      <form action="http://comic.naver.com/search.nhn">
-        <input #query id='query' type="text" placeholder="Search.." name="keyword">
-        <button type="button" ><i class="fa fa-search"></i></button>
-      </form>
+    <div id="container">
+      <h2 id=title>ToonLoader</h2>
+      <div class="search-container">
+          <input #query id='query' type="text" placeholder="Search.." name="keyword">
+          <button type="button" ><i class="fa fa-search"></i></button>
+      </div>
     </div>
   </body>
 </html>
