@@ -18,7 +18,8 @@
   "permissions": [
     "*://*.google.com/",
     "https://*.naver.com/",
-    "http://*.naver.com/"
+    "http://*.naver.com/",
+    "*://*.daum.net/"
   ],
   "content_security_policy": "script-src 'self' 'sha256-base64EncodedHash'; object-src 'self'"
 }
