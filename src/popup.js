@@ -1,6 +1,1 @@
-$(function() {
-  // sends message to background script
-  chrome.runtime.sendMessage({opened: true}, function(response) {
-    console.log(response.example);
-  });
-});
+chrome.tabs.create({url: chrome.extension.getURL('src/background.html')})

@@ -5,7 +5,7 @@
   "description": "",
   "version": "0.0.1",
   "background": {
-    "scripts": ["/src/background.js"]
+    "pages": ["/src/background.html"]
   },
   "content_scripts": [
     {
@@ -15,6 +15,10 @@
     }
   ],
   "browser_action": { "default_popup": "/src/popup.html" },
-  "permissions": ["*://google.com/*"],
-  "content_security_policy": "script-src 'self' https://cdn.mxpnl.com; object-src 'self'"
+  "permissions": [
+    "*://*.google.com/",
+    "https://*.naver.com/",
+    "http://*.naver.com/"
+  ],
+  "content_security_policy": "script-src 'self' 'sha256-base64EncodedHash'; object-src 'self'"
 }

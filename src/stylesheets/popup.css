@@ -1,7 +1,7 @@
 body {
   width: 320px;
   height: 320px;
-  /* ^ remove when more content is in here */ 
+  /* ^ remove when more content is in here */
   font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
@@ -12,4 +12,47 @@ h2 {
   font-weight: 600;
   text-align: center;
   text-decoration: underline;
+}
+
+body .search-container {
+  float: right;
+}
+
+
+body .search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+
+body .search-container button:hover {
+  background: #ccc;
+}
+
+@media screen and (max-width: 600px) {
+  body .search-container {
+    float: none;
+  }
+  body a, body input[type=text], body .search-container button {
+    float: none;
+    text-align: left;
+    margin: 0;
+    padding: 14px;
+    padding-right: 0;
+    display: inline;
+  }
+
+  body .search-container button {
+    min-width: 45px;
+  }
+
+  body input[type=text] {
+    border: 1px solid #ccc;
+    width: 70vw;
+  }
 }
