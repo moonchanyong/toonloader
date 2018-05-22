@@ -2,10 +2,6 @@
 
 chrome and while extention (made by chrome api)
 
-### MVC
-- Popup script (view)
-- Content script (controller)
-- Background script (model)
 
 ### Purpose
 
