@@ -5,27 +5,42 @@ const parseList = [
   { parser: parseNaverList, uri :naverSerarchURI },
   { parser: parseDaumList, uri: daumSearchURI },
 ]
-
+let resultBox;
 let test;
 // search button listener
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelector('button').addEventListener('click', search);
+  resultBox = document.getElementById('resultBox');
 });
 
 // 구조적문법 지려버렷고
 function search() {
-  let keyword = encodeURI(document.getElementById('query').value);
+  // remoce all result
+  Array.from(resultBox.children).forEach((item)=>{resultBox.removeChild(item)});
 
+  let keyword = encodeURI(document.getElementById('query').value);
   parseList.forEach(({parser, uri}) => {
     httpGet(`${uri}${keyword}`).then(({currentTarget})=> {
       let response = currentTarget.response;
       parser(response).then((list) => {
-        list.forEach((item) => {
-          console.log(item);
-        });
+        list.forEach(appendDom);
       });
     });
-  })
+  });
+}
+
+function appendDom({id, title, platform}) {
+  // undefined는 보여주지 않음
+  if(!title) return;
+
+  let spanEl = document.createElement('span');
+  spanEl.setAttribute('id', id);
+  spanEl.setAttribute('title', title);
+  spanEl.setAttribute('platform', platform);
+  spanEl.innerText = `${title} / ${platform}`;
+  spanEl.classList.add('resultItem');
+  resultBox.appendChild(spanEl);
+  console.log(spanEl);
 }
 
 function parseDaumList(dataString) {

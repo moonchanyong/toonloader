@@ -28,3 +28,15 @@ h2 {
   display: inline-block;
   margin: 0;
 }
+
+#resultBox {
+  background-color: #afafaf;
+
+}
+.resultItem {
+  width: 100vw;
+  height: 40px;
+  display: grid;
+  border-style: dotted;
+  border-width: 1px;
+}
