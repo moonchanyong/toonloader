@@ -32,6 +32,7 @@ chrome and while extention (made by chrome api)
   + naver: 엔드포인트에서 직접 가져오려고 했지만, 엔드포인트 uri가 다르다.
     - 하지만 웹툰 뷰어에서의 uri는 동일하므로 여기서 html파싱을 이미지 주소만 가져오자
     - 볼 수 있는 권한이 없으면 302code 그리고 redirect to list
+    - chromeApi 중 webRequest에서 인터셉터 역할을 하는 onBeforeSendHeaders에 리스터 추가해서 해결, 그냥 XMLHttpRequest는 Referer가 설정이 안된다.
   + referer: 헤더에 referer가 네이버가 아니면 이미지 크롤링 권한문제 발생, 해결방법찾는중
   + daum: 다음같은 경우는 서버사이드 렌더링이 아니라 우선 뷰어를 주고 데이터 요청으로 띄우기 때문에 article id를 찾고, article 띄우면 가능
     - 두번의 절차.
