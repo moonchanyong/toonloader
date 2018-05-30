@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="background.js"></script>
     <meta charset="UTF-8">
+    <meta name="referrer" content="same-origin" />
   </head>
 
   <body>
@@ -11,7 +12,8 @@
       <h2 id=title>ToonLoader</h2>
       <div class="search-container">
         <input #query id='query' type="text" placeholder="Search.." name="keyword">
-        <button type="button" ><i class="fa fa-search"></i></button>
+        <button id='search-btn' type="button" ><i class="fa fa-search"></i></button>
+        <button id='remove-btn' type="button" ><i class="fa fa-xing"></i></button>
         <div id="resultBox"></div>
       </div>
     </div>

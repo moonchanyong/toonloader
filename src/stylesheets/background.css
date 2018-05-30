@@ -17,7 +17,6 @@ h2 {
 
 
 #container {
-  positin: fixed;
   height: 5vh;
   max-height:
   width: 100vw;
@@ -39,4 +38,10 @@ h2 {
   display: grid;
   border-style: dotted;
   border-width: 1px;
+}
+
+.toon-img {
+  width: 70vw;
+  margin-left: 15vw;
+  margin-right: 15vw;
 }

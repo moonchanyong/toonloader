@@ -16,10 +16,13 @@
   ],
   "browser_action": { "default_popup": "/src/popup.html" },
   "permissions": [
+    "webRequest",
+    "webRequestBlocking",
     "*://*.google.com/",
     "https://*.naver.com/",
     "http://*.naver.com/",
-    "*://*.daum.net/"
+    "*://*.daum.net/",
+    "*://*.naver.net/"
   ],
   "content_security_policy": "script-src 'self' 'sha256-base64EncodedHash'; object-src 'self'"
 }

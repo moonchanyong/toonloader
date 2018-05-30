@@ -1,22 +1,103 @@
 const naverSerarchURI = 'http://comic.naver.com/search.nhn?keyword=';
-const daumSearchURI = 'http://webtoon.daum.net/data/pc/search/suggest?q='
+const naverToonURI = 'http://comic.naver.com/webtoon/detail.nhn';
+const naverReferer = 'http://comic.naver.com/webtoon/list.nhn';
+const daumSearchURI = 'http://webtoon.daum.net/data/pc/search/suggest?q=';
 const parser=new DOMParser();
 const parseList = [
   { parser: parseNaverList, uri :naverSerarchURI },
   { parser: parseDaumList, uri: daumSearchURI },
 ]
-let resultBox;
+
+// used to deguging
 let test;
+let resultBox;
+let currentView = {
+  no: 1,
+  id:'',
+  platform:'',
+  loading: false,
+}
+
+
 // search button listener
 document.addEventListener('DOMContentLoaded', function () {
-  document.querySelector('button').addEventListener('click', search);
+  document.getElementById('search-btn').addEventListener('click', search);
+  document.getElementById('remove-btn').addEventListener('click', closeSearchBox);
   resultBox = document.getElementById('resultBox');
+  document.getElementById('resultBox').addEventListener('click', ({target}) => {
+    currentView.no = 1;
+    currentView.id = target.getAttribute('id');
+    currentView.platform = target.getAttribute('platform');
+
+    setNaverReferer(`${naverReferer}${currentView.id}`);
+    loadToon(`${naverToonURI}${currentView.id}&no=${currentView.no}`);
+  });
+  document.addEventListener("scroll", function (event) {
+    if(window.scrollY / document.body.scrollHeight * 100 > 85 && !currentView.loading) {
+      currentView.loading = true;
+      currentView.no+=1;
+      console.log(currentView.no);
+      loadToon(`${naverToonURI}${currentView.id}&no=${currentView.no}`)
+        .then(() => {currentView.loading = false});
+    }
+  });
 });
+
+function closeSearchBox() {
+  // remoce all result
+  Array.from(resultBox.children).forEach((item)=>{resultBox.removeChild(item)});
+}
+
+function setNaverReferer(referer) {
+  chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
+    var newRef = referer;
+    var hasRef = false;
+    for(var n in details.requestHeaders){
+      hasRef = details.requestHeaders[n].name == "Referer";
+      if(hasRef){
+          details.requestHeaders[n].value = newRef;
+       break;
+      }
+    }
+    if(!hasRef){
+      details.requestHeaders.push({name:"Referer",value:newRef});
+    }
+    return {requestHeaders:details.requestHeaders};
+  },
+  {
+    urls:["http://imgcomic.naver.net/*"]
+  },
+  [
+    "requestHeaders",
+    "blocking"
+  ]);
+}
+
+function loadToon(uri) {
+  return new Promise((resolve, reeject) => {
+    httpGet(uri).then(({currentTarget}) => {
+      let response = currentTarget.response;
+      // TODO: naver에만 종속되는 코드
+      let lists = Array.from(parser.parseFromString(response, "text/html")
+        .getElementsByClassName('wt_viewer')[0].children);
+      closeSearchBox();
+
+      lists.forEach((img) => {
+        let imgEl = document.createElement('img');
+        imgEl.setAttribute('src', img.src);
+        imgEl.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+        imgEl.classList.add('toon-img');
+        document.body.appendChild(imgEl);
+      })
+      resolve(true);
+    });
+  })
+
+}
 
 // 구조적문법 지려버렷고
 function search() {
-  // remoce all result
-  Array.from(resultBox.children).forEach((item)=>{resultBox.removeChild(item)});
+  closeSearchBox();
 
   let keyword = encodeURI(document.getElementById('query').value);
   parseList.forEach(({parser, uri}) => {
@@ -40,14 +121,12 @@ function appendDom({id, title, platform}) {
   spanEl.innerText = `${title} / ${platform}`;
   spanEl.classList.add('resultItem');
   resultBox.appendChild(spanEl);
-  console.log(spanEl);
 }
 
 function parseDaumList(dataString) {
   let parsingData = JSON.parse(dataString).data;
   return new Promise((resolve, reject) => {
     let ret = [];
-    test = parsingData;
     ret.push(...parsingData.map(({title, nickname}) => ({
       id: nickname,
       title: title,
@@ -62,7 +141,7 @@ function parseNaverList(htmlText) {
     let ret = [];
       let lists = Array.from(parser.parseFromString(htmlText, "text/html")
       .getElementsByClassName('resultList'))
-      .splice(0,3);
+      .splice(0,1);
 
       // parsing atag
       lists.forEach(({children}) => {
@@ -83,6 +162,7 @@ function parseNaverList(htmlText) {
 
 function httpGet(uri) {
   let oReq = new XMLHttpRequest();
+  test = oReq;
   return new Promise((resolve, reject) => {
         oReq.addEventListener("load", resolve);
         oReq.open("GET", uri);
