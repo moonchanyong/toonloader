@@ -18,13 +18,13 @@ let currentView = {
   loading: false,
 }
 
-
 // search button listener
 document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('search-btn').addEventListener('click', search);
   document.getElementById('remove-btn').addEventListener('click', closeSearchBox);
+
   resultBox = document.getElementById('resultBox');
-  document.getElementById('resultBox').addEventListener('click', ({target}) => {
+  resultBox.addEventListener('click', ({target}) => {
     currentView.no = 1;
     currentView.id = target.getAttribute('id');
     currentView.platform = target.getAttribute('platform');
@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setNaverReferer(`${naverReferer}${currentView.id}`);
     loadToon(`${naverToonURI}${currentView.id}&no=${currentView.no}`);
   });
+
   document.addEventListener("scroll", function (event) {
     if(window.scrollY / document.body.scrollHeight * 100 > 85 && !currentView.loading) {
       currentView.loading = true;
@@ -85,17 +86,14 @@ function loadToon(uri) {
       lists.forEach((img) => {
         let imgEl = document.createElement('img');
         imgEl.setAttribute('src', img.src);
-        imgEl.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
         imgEl.classList.add('toon-img');
         document.body.appendChild(imgEl);
       })
       resolve(true);
     });
   })
-
 }
 
-// 구조적문법 지려버렷고
 function search() {
   closeSearchBox();
 
