@@ -16,6 +16,7 @@ let currentView = {
   id:'',
   platform:'',
   loading: false,
+  containningCount: 0,
 }
 
 // search button listener
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
   resultBox = document.getElementById('resultBox');
   resultBox.addEventListener('click', ({target}) => {
     currentView.no = 1;
+    currentView.containningCount+=1;
     currentView.id = target.getAttribute('id');
     currentView.platform = target.getAttribute('platform');
 
@@ -37,10 +39,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if(window.scrollY / document.body.scrollHeight * 100 > 85 && !currentView.loading) {
       currentView.loading = true;
       currentView.no+=1;
+      currentView.containningCount+=1;
+      if(currentView.containningCount > 3) (unloadToon(currentView.no - currentView.containningCount + 1))? currentView.containningCount-=1:console.log('fail to unload');
       console.log(currentView.no);
       loadToon(`${naverToonURI}${currentView.id}&no=${currentView.no}`)
         .then(() => {currentView.loading = false});
-    }
+    } 
   });
 });
 
@@ -74,6 +78,13 @@ function setNaverReferer(referer) {
   ]);
 }
 
+function unloadToon(no) {
+  let exist = document.getElementById(no);
+  if(exist) exist.remove();
+  console.log(`unload${no}`);
+  return true;
+}
+
 function loadToon(uri) {
   return new Promise((resolve, reeject) => {
     httpGet(uri).then(({currentTarget}) => {
@@ -84,7 +95,7 @@ function loadToon(uri) {
       closeSearchBox();
 
       let toonBox = document.createElement('div');
-      toonBox.setAttribute('no', currentView.no);
+      toonBox.setAttribute('id', currentView.no);
       lists.forEach((img) => {
         let imgEl = document.createElement('img');
         imgEl.setAttribute('src', img.src);
