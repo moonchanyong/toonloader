@@ -83,12 +83,16 @@ function loadToon(uri) {
         .getElementsByClassName('wt_viewer')[0].children);
       closeSearchBox();
 
+      let toonBox = document.createElement('div');
+      toonBox.setAttribute('no', currentView.no);
       lists.forEach((img) => {
         let imgEl = document.createElement('img');
         imgEl.setAttribute('src', img.src);
         imgEl.classList.add('toon-img');
-        document.body.appendChild(imgEl);
+        toonBox.appendChild(imgEl);
       })
+
+      document.body.appendChild(toonBox);
       resolve(true);
     });
   })
